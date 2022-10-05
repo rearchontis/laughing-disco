@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {DataTable} from 'react-native-paper';
-import {FlatList, ScrollView, StyleSheet} from 'react-native';
+import {ScrollView, StyleSheet} from 'react-native';
+import {FlashList} from '@shopify/flash-list';
 import {queryDataFromTable} from './db';
 import {TableRow} from './TableRow';
 interface TableScreenProps {
@@ -8,7 +9,7 @@ interface TableScreenProps {
 }
 
 export const TableScreen = ({tbl_name}: TableScreenProps) => {
-  const [data, setData] = useState<any>([]);
+  const [data, setData] = useState<Record<string, unknown>[]>([]);
 
   useEffect(() => {
     (async () => {
@@ -16,7 +17,7 @@ export const TableScreen = ({tbl_name}: TableScreenProps) => {
     })();
   }, [tbl_name]);
 
-  // console.log(data);
+  console.log(data);
 
   if (data.length > 0) {
     const headers = Object.keys(data[0]);
@@ -31,10 +32,14 @@ export const TableScreen = ({tbl_name}: TableScreenProps) => {
               </DataTable.Title>
             ))}
           </DataTable.Header>
-          <FlatList
+          <FlashList
             data={data}
-            initialNumToRender={20}
             renderItem={({item}) => <TableRow data={item} />}
+            estimatedItemSize={data.length}
+            estimatedListSize={{
+              width: styles.cell.width,
+              height: styles.cell.height,
+            }}
           />
         </DataTable>
       </ScrollView>
@@ -48,6 +53,6 @@ const styles = StyleSheet.create({
   cell: {
     padding: 5,
     width: 150,
-    heigth: 50,
+    height: 50,
   },
 });

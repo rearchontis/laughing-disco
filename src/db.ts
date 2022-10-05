@@ -14,7 +14,9 @@ export async function queryTables() {
   return result[0].rows.raw();
 }
 
-export async function queryDataFromTable(tbl_name: string) {
+export async function queryDataFromTable(
+  tbl_name: string,
+): Promise<Record<string, unknown>[]> {
   const db = await SQLiteConnection();
 
   const sql = `SELECT * FROM ${tbl_name}`;
@@ -23,7 +25,12 @@ export async function queryDataFromTable(tbl_name: string) {
   return result[0].rows.raw();
 }
 
-export async function queryRelations() {
+/**
+ * Needs for benchmarking, but isn't ready for usage
+ * TODO: rewrite with generators to avoid
+ * @error RangeError: Maximum call stack size exceeded
+ */
+export async function queryAllRelations() {
   const tables = await queryTables();
 
   for (const tbl_name of tables) {

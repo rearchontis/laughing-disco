@@ -1,18 +1,18 @@
 import React from 'react';
-import {FlatList} from 'react-native';
+import {FlashList} from '@shopify/flash-list';
 import {List, Divider} from 'react-native-paper';
 import type {StackNavigationProp} from '@react-navigation/stack';
 
 interface TablesListScreenProps {
-  navigation?: StackNavigationProp<{[key: string]: undefined}>;
   tables: Array<{tbl_name: string}>;
+  navigation: StackNavigationProp<{[key: string]: undefined}>;
 }
 
 export const TablesListScreen = ({
   tables,
   navigation,
 }: TablesListScreenProps) => (
-  <FlatList
+  <FlashList
     data={tables}
     renderItem={({item}) => (
       <List.Item
@@ -22,5 +22,6 @@ export const TablesListScreen = ({
     )}
     keyExtractor={item => item.tbl_name}
     ItemSeparatorComponent={Divider}
+    estimatedItemSize={tables.length}
   />
 );
